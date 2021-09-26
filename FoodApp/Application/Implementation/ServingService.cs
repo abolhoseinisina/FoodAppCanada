@@ -71,41 +71,50 @@ namespace FoodApp.Application.Implementation
             var foods = await FoodRepository.GetFoods();
             var statements = await StatementRepository.GetStatements();
 
-            var dailyMenu = new DailyMenuDTO { Age = genderAge.Age, Gender = genderAge.Gender };
-            var meals = new List<Meal>();
-            foreach(var serving in selectedServings)
+            var dailyMenu = new DailyMenuDTO { Age = genderAge.Age, Gender = genderAge.Gender, FoodGroups = new List<FoodGroupDTO>() };
+            foreach (var serving in selectedServings)
             {
-                var selectedfoodGroups =  foodGroups.Where(c => c.FoodGroupId == serving.FoodGroupId)
-                                     .Select(c => new { c.FoodGroupCategoryId , c.FoodGroupName, c.FoodGroupId });
+                var selectedfoodGroups =  foodGroups.Where(c => c.FoodGroupId == serving.FoodGroupId);
                 if (selectedfoodGroups == null) continue;
-                foreach(var foodGroup in selectedfoodGroups)
+
+                var foodGroupDTO = new FoodGroupDTO
                 {
+                    FoodGroupId = serving.FoodGroupId,
+                    ServingPerDay = serving.Servings,
+                    Foods = new List<FoodDTO>(),
+                    Directions = new List<DirectionDTO>()
+                };
+
+                foreach (var foodGroup in selectedfoodGroups)
+                {
+                    foodGroupDTO.FoodGroupName = foodGroup.FoodGroupName;
+
                     var food = foods.Where(c => c.FoodGroupId == serving.FoodGroupId && c.FoodGroupCategory == (foodGroup.FoodGroupCategoryId - 1))
                                       .OrderBy(r => Guid.NewGuid())
                                       .FirstOrDefault();
-                    if (food == null) continue;
-                    meals.Add(new Meal
+                    if (food != null)
                     {
-                        FoodGroupId = foodGroup.FoodGroupId,
-                        FoodGroup = foodGroup.FoodGroupName,
-                        Food = food.Foods,
-                        ServingSize = food.ServingSize
+                        foodGroupDTO.Foods.Add(new FoodDTO
+                        {
+                            FoodCategory = foodGroup.FoodGroupCategoryName,
+                            Food = food.Foods,
+                            ServingSize = food.ServingSize
+                        });
+                    }
+                }
+
+                var directions = statements.Where(c => c.FoodGroupId == serving.FoodGroupId)
+                                               .ToList();
+                foreach (var direction in directions)
+                {
+                    foodGroupDTO.Directions.Add(new DirectionDTO
+                    {
+                        Statement = direction.DirectionalStatement
                     });
                 }
+                dailyMenu.FoodGroups.Add(foodGroupDTO);
             }
-            dailyMenu.Meals = meals;
-
-            var directions = new List<Direction>();
-            foreach(var statement in statements)
-            {
-                directions.Add(new Direction
-                {
-                    FoodGroupId = statement.FoodGroupId,
-                    Statement = statement.DirectionalStatement
-                });
-            }
-            dailyMenu.Directions = directions;
-
+            
             return dailyMenu;
         }
     }
