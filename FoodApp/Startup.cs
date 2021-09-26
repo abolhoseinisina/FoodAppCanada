@@ -1,3 +1,7 @@
+using FoodApp.Application.Implementation;
+using FoodApp.Application.Interface;
+using FoodApp.Persistance.Context;
+using FoodApp.Persistance.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -21,6 +25,14 @@ namespace FoodApp
         {
 
             services.AddControllersWithViews();
+
+            services.AddDbContext<FoodAppContext>();
+
+            services.AddScoped<IServingService, ServingService>();
+            services.AddScoped<IServingRepository, ServingRepository>();
+            services.AddScoped<IFoodGroupRepository, FoodGroupRepository>();
+            services.AddScoped<IFoodRepository, FoodRepository>();
+            services.AddScoped<IStatementRepository, StatementRepository>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
