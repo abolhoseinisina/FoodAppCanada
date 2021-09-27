@@ -1,4 +1,4 @@
-# FoodAppCanada
+# Food App Canada
 This web application is developed to provide an online service that can guide users to eat better and more healthy. 
 It gives you serving per day for each food group (Vegetables and Fruits, Grains, Milk and Alternatives, Meat and Alternatives).
 This guide system is working based on your age and gender. It also gives you the ability to get information for you and your family.
