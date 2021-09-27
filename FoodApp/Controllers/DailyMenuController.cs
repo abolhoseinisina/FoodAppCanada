@@ -1,6 +1,8 @@
 ﻿using FoodApp.Application.Interface;
 using FoodApp.Application.Model;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FoodApp.Controllers
@@ -20,6 +22,13 @@ namespace FoodApp.Controllers
         public async Task<IActionResult> GetDailyMenu([FromBody] GenderAge genderAge)
         {
             return Ok(await ServingService.GetDailyMenu(genderAge));
+        }
+
+        [HttpPost]
+        [Route("Family")]
+        public async Task<IActionResult> GetDailyMenu([FromBody] List<GenderAge> genderAgeList)
+        {
+            return Ok(await ServingService.GetFamilyDailyMenu(genderAgeList));
         }
 
         [HttpGet]

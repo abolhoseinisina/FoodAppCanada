@@ -1,10 +1,10 @@
 ﻿using FoodApp.Application.Interface;
-using FoodApp.Domain.Model;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 using FoodApp.Application.Model;
+using FoodApp.Domain.Model;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FoodApp.Application.Implementation
 {
@@ -74,7 +74,7 @@ namespace FoodApp.Application.Implementation
             var dailyMenu = new DailyMenuDTO { Age = genderAge.Age, Gender = genderAge.Gender, FoodGroups = new List<FoodGroupDTO>() };
             foreach (var serving in selectedServings)
             {
-                var selectedfoodGroups =  foodGroups.Where(c => c.FoodGroupId == serving.FoodGroupId);
+                var selectedfoodGroups = foodGroups.Where(c => c.FoodGroupId == serving.FoodGroupId);
                 if (selectedfoodGroups == null) continue;
 
                 var foodGroupDTO = new FoodGroupDTO
@@ -114,8 +114,77 @@ namespace FoodApp.Application.Implementation
                 }
                 dailyMenu.FoodGroups.Add(foodGroupDTO);
             }
-            
+
             return dailyMenu;
+        }
+
+        public async Task<FamilyDailyMenuDTO> GetFamilyDailyMenu(List<GenderAge> genderAge)
+        {
+            var familyMenu = new FamilyDailyMenuDTO();
+            familyMenu.FoodGroups = new List<FamiyFoodGroupDTO>();
+
+            var foodGroups = await FoodGroupRepository.GetFoodGroups();
+            var distinctFoodGroups = foodGroups.Select(c => c.FoodGroupId)
+                                               .Distinct()
+                                               .ToList();
+            var foods = await FoodRepository.GetFoods();
+            var servings = await ServingRepository.GetServings();
+            var statements = await StatementRepository.GetStatements();
+
+            foreach (var dFoodGroup in distinctFoodGroups)
+            {
+                var foodGroup = foodGroups.Where(c => c.FoodGroupId == dFoodGroup)
+                                          .ToList();
+                if (foodGroup == null) continue;
+                var familyFoodGroup = new FamiyFoodGroupDTO
+                {
+                    FoodGroupId = foodGroup.FirstOrDefault().FoodGroupId,
+                    FoodGroupName = foodGroup.FirstOrDefault().FoodGroupName,
+                    Members = new List<FamilyMember>(),
+                    Foods = new List<FoodDTO>(),
+                    Directions = new List<DirectionDTO>()
+                };
+                foreach (var ga in genderAge)
+                {
+                    var serving = servings.Where(c => c.Age == ga.Age && c.Gender == ga.Gender && c.FoodGroupId == foodGroup.FirstOrDefault().FoodGroupId)
+                                          .FirstOrDefault();
+                    if (serving == null) continue;
+                    var member = new FamilyMember
+                    {
+                        Age = ga.Age,
+                        Gender = ga.Gender,
+                        ServingPerDay = serving.Servings
+                    };
+                    familyFoodGroup.Members.Add(member);
+                }
+
+                foreach (var foodCategory in foodGroup)
+                {
+                    var food = foods.Where(c => c.FoodGroupId == foodCategory.FoodGroupId && c.FoodGroupCategory == (foodCategory.FoodGroupCategoryId - 1))
+                                      .OrderBy(r => Guid.NewGuid())
+                                      .FirstOrDefault();
+                    if (food == null) continue;
+                    familyFoodGroup.Foods.Add(new FoodDTO
+                    {
+                        FoodCategory = foodCategory.FoodGroupCategoryName,
+                        Food = food.Foods,
+                        ServingSize = food.ServingSize
+                    });
+                }
+
+                var directions = statements.Where(c => c.FoodGroupId == dFoodGroup)
+                                               .ToList();
+                foreach (var direction in directions)
+                {
+                    familyFoodGroup.Directions.Add(new DirectionDTO
+                    {
+                        Statement = direction.DirectionalStatement
+                    });
+                }
+                familyMenu.FoodGroups.Add(familyFoodGroup);
+            }
+
+            return familyMenu;
         }
     }
 }

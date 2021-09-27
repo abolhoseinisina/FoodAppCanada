@@ -16,5 +16,7 @@ namespace FoodApp.Application.Interface
         public Task<ICollection<string>> GetGenderRanges();
 
         public Task<DailyMenuDTO> GetDailyMenu(GenderAge genderAge);
+
+        public Task<FamilyDailyMenuDTO> GetFamilyDailyMenu(List<GenderAge> genderAge);
     }
 }
