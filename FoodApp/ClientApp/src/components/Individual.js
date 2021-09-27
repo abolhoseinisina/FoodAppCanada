@@ -42,7 +42,7 @@ export class Individual extends Component {
                         <tr key={foodGroup.foodGroupId}>
                             <td>{foodGroup.foodGroupName}</td>
                             <td>{foodGroup.servingPerDay}</td>
-                            <td>{foodGroup.foods.map(food => <p>{food.foodCategory}: {food.servingSize} {food.food}</p>) }</td>
+                            <td>{foodGroup.foods.map(food => <p>{food.foodCategory}: {food.servingSize} {food.food}</p>)}</td>
                             <td>{foodGroup.directions.map(direction => <p>{direction.statement}</p>)}</td>
                         </tr>
                     )}
@@ -66,7 +66,7 @@ export class Individual extends Component {
 
     render() {
         let contents = this.state.loading
-            ? <p><em>Waiting ...</em></p>
+            ? <p></p>
             : Individual.renderMealsTable(this.state.foodGroups);
 
         return (
@@ -74,15 +74,19 @@ export class Individual extends Component {
                 <h1 id="tabelLabel" >Individual Daily Menu</h1>
                 <p>You can find out a proper suggestion for daily meals based on your age and gender.</p>
                 <form onSubmit={this.handleSubmit}>
-                    <p> Gender: </p>
-                    <select id="gender-range" name="gender" onChange={this.handleChange}>
-                        <option value="0">Select your gender</option>
-                    </select><br />
-                    <p> Age: </p>
-                    <select id="age-range" name="age" onChange={this.handleChange}>
-                        <option value="0">Select your age</option>
-                    </select><br />
-                    <input type="submit" value="Submit" /><br />
+                    <p> Gender:
+                        <select id="gender-range" name="gender" onChange={this.handleChange}>
+                            <option value="0">Select your gender</option>
+                        </select>
+                    </p>
+                    <p> Age:
+                        <select id="age-range" name="age" onChange={this.handleChange}>
+                            <option value="0">Select your age</option>
+                        </select>
+                    </p>
+                    <p>
+                        <input type="submit" class="btn btn-info" value="Get Daily Menu" /><br />
+                    </p>
                 </form>
                 {contents}
             </div>
@@ -90,6 +94,11 @@ export class Individual extends Component {
     }
 
     async populateMenuData() {
+        if (this.state.age === '' || this.state.gender === '' || this.state.age === '0' || this.state.gender === '0') {
+            alert("Select your age and gender.")
+            return;
+        }
+
         const response = await fetch('api/DailyMenu', {
             method: 'POST',
             headers: new Headers({
@@ -121,8 +130,6 @@ export class Individual extends Component {
             for (let i in data) {
                 document.getElementById("age-range").innerHTML += '<option value="' + data[i] + '">' + data[i] + '</option>';
             }
-            //var event = new Event('change');
-            //document.getElementById("age-range").dispatchEvent(event);
         }
     }
 
@@ -131,8 +138,6 @@ export class Individual extends Component {
             for (let i in data) {
                 document.getElementById("gender-range").innerHTML += '<option value="' + data[i] + '">' + data[i] + '</option>';
             }
-            //var event = new Event('change');
-            //document.getElementById("gender-range").dispatchEvent(event);
         }
     }
 }
