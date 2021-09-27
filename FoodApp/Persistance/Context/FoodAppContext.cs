@@ -1,7 +1,6 @@
 ﻿using FoodApp.Domain.Model;
 using FoodApp.Persistance.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 
 namespace FoodApp.Persistance.Context
