@@ -13,6 +13,11 @@ export class Family extends Component {
 
     incrementCounter() {
         if (this.state.currentCount >= 10) return;
+        if (document.querySelectorAll('.gender-selectors option').length === 1) {
+            alert('wait ...');
+            return;
+        }
+
         this.setState({
             currentCount: this.state.currentCount + 1
         });
@@ -175,7 +180,7 @@ export class Family extends Component {
                     {foodGroups.map(foodGroup =>
                         <tr key={foodGroup.foodGroupId}>
                             <td>{foodGroup.foodGroupName}</td>
-                            <td>{foodGroup.members.map(member => <p>For {member.age} {member.gender}: {member.servingPerDay} serving(s)</p>)}</td>
+                            <td>{foodGroup.members.map(member => <p><b>{member.age} {member.gender}</b>: {member.servingPerDay} serving(s)</p>)}</td>
                             <td>{foodGroup.foods.map(food => <p>{food.foodCategory}: {food.servingSize} {food.food}</p>)}</td>
                             <td>{foodGroup.directions.map(direction => <p>{direction.statement}</p>)}</td>
                         </tr>
