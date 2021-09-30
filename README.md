@@ -39,7 +39,7 @@ Use the following steps to build the application:
 ## Deploying the application in IIS on Windows 10
 You need the following programs to host the application on Windows 10.
 1. IIS
-2. Dot Net Core Windows Hosting Bundle <a href="https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-aspnetcore-5.0.10-windows-hosting-bundle-installer">donwload</a>
+2. Dot Net Core Windows Hosting Bundle <a href="https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-aspnetcore-5.0.10-windows-hosting-bundle-installer">download</a>
 3. Visual Studio 2019
 4. Node.js <a href="https://nodejs.org/en/">download</a>
 
