@@ -34,7 +34,7 @@ export class Family extends Component {
         row.appendChild(genderCell);
 
         var ageCell = document.createElement("td");
-        ageCell.innerHTML = "Gender: " + document.querySelectorAll('.age-selectors')[0].outerHTML;
+        ageCell.innerHTML = "Age: " + document.querySelectorAll('.age-selectors')[0].outerHTML;
         row.appendChild(ageCell);
 
         document.getElementById("member-rows").appendChild(row);
