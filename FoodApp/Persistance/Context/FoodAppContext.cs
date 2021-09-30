@@ -22,12 +22,14 @@ namespace FoodApp.Persistance.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=FoodAppDB;Trusted_Connection=True;MultipleActiveResultSets=true");
+            //optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=FoodAppDB;Trusted_Connection=True;MultipleActiveResultSets=true");
+            optionsBuilder.UseSqlServer("workstation id=FoodAppDB.mssql.somee.com;packet size=4096;user id=ebola_SQLLogin_1;pwd=p5qwjuon1k;data source=FoodAppDB.mssql.somee.com;persist security info=False;initial catalog=FoodAppDB");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            SeedData(modelBuilder);
+            // You can remove SeedData method after creating migrations
+            //SeedData(modelBuilder);
         }
 
         private void SeedData(ModelBuilder modelBuilder)
