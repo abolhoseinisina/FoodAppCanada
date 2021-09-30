@@ -20,7 +20,7 @@ Individually, you can enter your age and gender and get a daily menu with food e
 As a family, you can enter the age and gender of all the members of your family and get a family daily menu with food examples.
 
 ## Demo
-You can see the Demo of this tool in this <a href="http://canadafoodapp.somee.com/">link</a>.
+You can see the Demo of this tool in this <a href="http://canadafoodapp.somee.com/">link</a> and here is the <a href="https://drive.google.com/file/d/1AoxpOPZCVvi8bTCqb3HSQvbdY9w4FVE6/view?usp=sharing">Video Demo</a>.
 * Note: This Demo is deployed on <a href="https://somee.com/">somee.com</a> free hosting plan. The SQL Server is also hosted in this website. They may expire due to low number of visitations. In this case, you should change the `ConnectionString` in `FoodAppContext.cs` (line 25) to address another a SQL Server on another server.You can also use `MSSQLLocalDB` by passing the following `ConnectionString`. `MSSQLLocalDB` normally works on IISExpress.
 
 `optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=FoodAppDB;Trusted_Connection=True;MultipleActiveResultSets=true");`
