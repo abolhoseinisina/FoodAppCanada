@@ -57,3 +57,5 @@ Now the IIS is ready. We have to build the application with Visual Studio 2019 i
 4. Choose publish to `folder` and choose the physical path from the previous steps.
 5. Click `Publish` and wait for it.
 6. After a successful build, open your browser and navigate to `http://localhose:8009`
+
+For more information you can refer to this <a href="https://www.c-sharpcorner.com/article/how-to-deploy-asp-net-core-5-0-application-in-windows-server-iis/">website</a>.
